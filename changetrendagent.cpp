@@ -32,15 +32,21 @@ void changeTrendAgent::play()
             if(greatestSellPrice >= m_greatestSellPrice && lowestSellPrice <= m_lowestSellPrice)
             {
                 qint32 price = m_stocksInfo[i].getBestBuyPrice() + 2 - qrand()%6;
-
-                qint32 maxAmount = m_store.getStockAmount(i);
-                if(maxAmount)
+                if(!m_stocksInfo[i].getBestBuyPrice())
                 {
-                    qint32 amount = pow(std::min(static_cast<double>(m_lowestSellPrice)/lowestSellPrice, 1.15), 10 + static_cast<double>(14*qrand())/RAND_MAX) *
-                            (1 + static_cast<double>(2*qrand())/RAND_MAX) * (static_cast<double>(money)/1000000) + 2 + qrand() % 5;
-                    amount %= maxAmount;
-                    if(amount)
-                        sellStock(i, amount, price);
+                    price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+                }
+                if(price)
+                {
+                    qint32 maxAmount = m_store.getStockAmount(i);
+                    if(maxAmount)
+                    {
+                        qint32 amount = pow(std::min(static_cast<double>(m_lowestSellPrice)/lowestSellPrice, 1.15), 10 + static_cast<double>(14*qrand())/RAND_MAX) *
+                                (1 + static_cast<double>(2*qrand())/RAND_MAX) * (static_cast<double>(money)/1000000) + 2 + qrand() % 5;
+                        amount %= maxAmount;
+                        if(amount)
+                            sellStock(i, amount, price);
+                    }
                 }
             }
         }
@@ -49,6 +55,10 @@ void changeTrendAgent::play()
         if(greatestBuyPrice >= m_greatestBuyPrice && lowestBuyPrice <= m_lowestBuyPrice)
         {
             qint32 price = m_stocksInfo[i].getBestSellPrice() - 2 + qrand()%6;
+            if(!m_stocksInfo[i].getBestSellPrice())
+            {
+                price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+            }
             if(price)
             {
                 qint32 maxAmount = money/price;

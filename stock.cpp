@@ -53,6 +53,15 @@ qint32 Stock::getBestBuyAmount() const
     return m_bestBuyOrder.second;
 }
 
+qint32 Stock::lastPrice()
+{
+    if(m_priceHistory.isEmpty())
+        return 0;
+    QMap<QDateTime, QPair<qint32, qint32> >::const_iterator it = m_priceHistory.end();
+    --it;
+    return it.value().first;
+}
+
 double Stock::trendValue(qint64 historyTime) const
 {
     if(m_priceHistory.isEmpty())

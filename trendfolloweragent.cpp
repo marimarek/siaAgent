@@ -31,15 +31,21 @@ void TrendFollowerAgent::play()
             if(downTrendValue <= m_downTrendValue)
             {
                 qint32 price = m_stocksInfo[i].getBestBuyPrice();
-
-                qint32 maxAmount =  m_store.getStockAmount(i);
-                if(maxAmount)
+                if(!price)
                 {
-                    qint32 amount = pow(std::min(static_cast<double>(m_downTrendValue)/downTrendValue, 1.15), 10 + static_cast<double>(14*qrand())/RAND_MAX) *
-                            (1 + static_cast<double>(2*qrand())/RAND_MAX) * (static_cast<double>(money)/1000000) + 2 + qrand() % 5;
-                    amount %= maxAmount;
-                    if(amount)
-                        sellStock(i, amount, price);
+                    price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+                }
+                if(price)
+                {
+                    qint32 maxAmount =  m_store.getStockAmount(i);
+                    if(maxAmount)
+                    {
+                        qint32 amount = pow(std::min(static_cast<double>(m_downTrendValue)/downTrendValue, 1.15), 10 + static_cast<double>(14*qrand())/RAND_MAX) *
+                                (1 + static_cast<double>(2*qrand())/RAND_MAX) * (static_cast<double>(money)/1000000) + 2 + qrand() % 5;
+                        amount %= maxAmount;
+                        if(amount)
+                            sellStock(i, amount, price);
+                    }
                 }
             }
         }
@@ -47,6 +53,10 @@ void TrendFollowerAgent::play()
         if(upTrendValue >= m_upTrendValue)
         {
             qint32 price = m_stocksInfo[i].getBestSellPrice();
+            if(!price)
+            {
+                price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+            }
             if(price)
             {
                 qint32 maxAmount = money/price;

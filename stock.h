@@ -23,6 +23,8 @@ public:
     qint32 getBestBuyPrice() const;
     qint32 getBestBuyAmount() const;
 
+    qint32 lastPrice();
+
     double trendValue(qint64 historyTime) const;
     double greatestPrice(qint64 historyTime) const;
     double lowestPrice(qint64 historyTime) const;

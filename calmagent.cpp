@@ -50,20 +50,30 @@ void calmAgent::play()
             if(m_stocksInfo[i].getBestBuyPrice() >  m_myPrognozePrice[i]*(1 + m_procent*qrand()/RAND_MAX))
             {
                 qint32 price = m_stocksInfo[i].getBestBuyPrice();
-
-                qint32 maxAmount = m_store.getStockAmount(i);
-                if(maxAmount)
+                if(!price)
                 {
-                    qint32 amount = m_stocksInfo[i].getBestBuyAmount();
-                    amount %= maxAmount;
-                    if(amount)
-                        sellStock(i, amount, price);
+                    price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+                }
+                if(price)
+                {
+                    qint32 maxAmount = m_store.getStockAmount(i);
+                    if(maxAmount)
+                    {
+                        qint32 amount = m_stocksInfo[i].getBestBuyAmount();
+                        amount %= maxAmount;
+                        if(amount)
+                            sellStock(i, amount, price);
+                    }
                 }
             }
         }
         if(m_stocksInfo[i].getBestSellPrice() <  m_myPrognozePrice[i]*(1 - m_procent*qrand()/RAND_MAX))
         {
             qint32 price = m_stocksInfo[i].getBestSellPrice();
+            if(!price)
+            {
+                price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+            }
             if(price)
             {
                 qint32 maxAmount = money/price;

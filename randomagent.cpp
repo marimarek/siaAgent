@@ -27,21 +27,31 @@ void RandomAgent::play()
             if(static_cast<double>(qrand())/RAND_MAX < m_sellStockChange)
             {
                 qint32 price = m_stocksInfo[i].getBestBuyPrice() + 3 - qrand() % 10;
-
-                qint32 maxAmount = m_store.getStockAmount(i);
-                if(maxAmount)
+                if(!m_stocksInfo[i].getBestBuyPrice())
                 {
-                    qint32 amount = pow(1 + static_cast<double>(0.15*qrand())/RAND_MAX, 10 + static_cast<double>(14*qrand())/RAND_MAX) *
-                            (1 + static_cast<double>(2*qrand())/RAND_MAX) * (static_cast<double>(money)/1000000) + 2 + qrand() % 5;
-                    amount %= maxAmount;
-                    if(amount)
-                        sellStock(i, amount, price);
+                    price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+                }
+                if(price)
+                {
+                    qint32 maxAmount = m_store.getStockAmount(i);
+                    if(maxAmount)
+                    {
+                        qint32 amount = pow(1 + static_cast<double>(0.15*qrand())/RAND_MAX, 10 + static_cast<double>(14*qrand())/RAND_MAX) *
+                                (1 + static_cast<double>(2*qrand())/RAND_MAX) * (static_cast<double>(money)/1000000) + 2 + qrand() % 5;
+                        amount %= maxAmount;
+                        if(amount)
+                            sellStock(i, amount, price);
+                    }
                 }
             }
         }
         if(static_cast<double>(qrand())/RAND_MAX < m_buyStockChange)
         {
             qint32 price = m_stocksInfo[i].getBestSellPrice() - 3 + qrand() % 10;
+            if(!m_stocksInfo[i].getBestSellPrice())
+            {
+                price =  m_stocksInfo[i].lastPrice() *(0.99 + (0.02 * qrand())/RAND_MAX);
+            }
             if(price)
             {
                 qint32 maxAmount = money/price;

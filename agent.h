@@ -34,6 +34,8 @@ protected:
 
     static const int NOT_ASSIGNED = -1;
 
+    static const int PRICES[STOKS_NUMBER + 2];
+
     Connection* m_conn;
 
     qint32 m_userId;
@@ -66,7 +68,7 @@ public slots:
     void subscribeStock(qint32 stockId);
     void cancelReq(qint32 orderId);
 
-    void start();
+    virtual void start();
     virtual void play();
     void stop();
 

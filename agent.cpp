@@ -1,5 +1,7 @@
 #include "agent.h"
 
+const int Agent::PRICES[STOKS_NUMBER + 2] = {0,0, 4185, 12360, 40, 38000, 1399, 800, 9990, 7600, 7600, 14580, 4084, 16540, 1715, 630, 5449, 3447, 44800, 535, 436, 799};
+
 Agent::Agent(int msecInIdle, qint64 historyTime, QObject *parent) :
     QObject(parent), m_conn(new Connection(this)), m_userId(NOT_ASSIGNED), m_password("abcde"), m_historyTime(historyTime),
     m_idleTimer(new QTimer(this))

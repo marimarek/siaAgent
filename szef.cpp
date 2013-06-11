@@ -35,10 +35,10 @@ void Szef::start()
     qDebug() << "[Szef] Szef is starting.";
     for(int i = 2; i <= STOKS_NUMBER; ++i)
     {
-        for(int j = 0; j < 20; ++j)
+        for(int j = 1; j <= 5; ++j)
         {
-            buyStock(i, 1 + 20.0*qrand()/RAND_MAX, std::min(static_cast<int>(PRICES[i]*(0.98 + 0.015*qrand()/RAND_MAX)), PRICES[i]-1));
-            sellStock(i, 1 + 20.0*qrand()/RAND_MAX, std::max(static_cast<int>(PRICES[i]*(1.02 - 0.015*qrand()/RAND_MAX)), PRICES[i]+1));
+            buyStock(i, 100/j, PRICES[i]-3-j);
+            sellStock(i, 100/j, PRICES[i]+3+j);
         }
     }
 
